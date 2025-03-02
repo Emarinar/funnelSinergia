@@ -32,27 +32,70 @@ body {
 }
 
 /* ===========================
-   Header
+   Encabezado (Header)
 =========================== */
-/* Estilos para el encabezado */
 .site-header {
   width: 100%;
-  background-color: white;
+  background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px 0;
+  padding: 10px 0;
 }
 
 .header-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-.site-header .logo {
-  max-width: 250px; /* Ajusta el tamaño según tu diseño */
+.logo-container a {
+  display: inline-block;
+}
+
+.logo {
+  max-width: 200px;
   height: auto;
   display: block;
-  margin: 0 auto;
+}
+
+.main-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.main-nav ul li {
+  margin: 0 15px;
+}
+
+.main-nav ul li a {
+  text-decoration: none;
+  font-size: 1rem;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.main-nav ul li a:hover {
+  color: #007BFF;
+}
+
+/* Responsive: menú se puede ajustar o colapsar en dispositivos pequeños */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+  }
+  
+  .main-nav ul {
+    flex-direction: column;
+    margin-top: 10px;
+  }
+  
+  .main-nav ul li {
+    margin: 5px 0;
+  }
 }
 
 /* ===========================
@@ -108,34 +151,151 @@ body {
 
 
 /* ===========================
-   Sección de Servicios
+   Sección "Servicios de Sinergia Consultoría SGI"
 =========================== */
 .services-section {
-  margin-bottom: 40px;
-  text-align: left;
-}
-.services-section h2 {
+  padding: 60px 20px;
+  background-color: #f5f5f5; /* Fondo claro para resaltar la sección */
   text-align: center;
+}
+
+.services-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.services-section header h2 {
+  font-size: 2.5rem;
   margin-bottom: 20px;
 }
-.services-section p,
-.services-section ul {
-  margin-bottom: 20px;
+
+.services-section header p {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  color: #555;
 }
-.services-section ul {
+
+/* Estilos para cada categoría de servicio */
+.service-category {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  margin: 0 auto 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-category:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.service-category .icon-container {
+  margin-bottom: 15px;
+}
+
+.service-category .service-icon {
+  width: 60px;
+  height: auto;
+}
+
+.service-category h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #007BFF;
+}
+
+.service-category ul {
   list-style: none;
   padding: 0;
+  text-align: left;
 }
-.services-section ul li {
-  position: relative;
-  padding-left: 25px;
+
+.service-category ul li {
+  font-size: 1rem;
+  color: #555;
   margin-bottom: 10px;
+  position: relative;
+  padding-left: 20px;
 }
-.services-section ul li::before {
+
+.service-category ul li::before {
   content: '✔';
   position: absolute;
   left: 0;
+  top: 0;
   color: #007BFF;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.services-section footer p {
+  font-size: 1.2rem;
+  margin-top: 40px;
+  color: #333;
+}
+
+/* ===========================
+   Sección "¿Por qué elegir Sinergia Consultoría SGI?"
+=========================== */
+.why-choose {
+  padding: 60px 20px;
+  background-color: #f5f5f5; /* Fondo claro para destacar la sección */
+  text-align: center;
+}
+
+.why-choose .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.why-choose h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.why-choose p {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  color: #555;
+}
+
+.why-choose .features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.why-choose .feature {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.why-choose .feature:hover {
+  transform: translateY(-5px);
+}
+
+.why-choose .feature img {
+  max-width: 60px;
+  margin-bottom: 15px;
+}
+
+.why-choose .feature h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #1f580d; /* Puedes ajustar el color para que coincida con tu paleta */
+}
+
+.why-choose .feature p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.5;
 }
 
 /* ===========================

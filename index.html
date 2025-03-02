@@ -8,14 +8,32 @@
   <link rel="stylesheet" href="css/styles.css">
   <!-- Fuente profesional desde Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Regla para desplazamiento suave -->
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Header: Logo y navegación (opcional) -->
+  <!-- Header: Logo y navegación -->
   <header class="site-header">
-    <div class="container">
-      <img src="assets/logoSinergia.png" alt="Sinergia Consultoría SGI" class="logo">
-      <!-- Aquí podrías agregar un menú de navegación si lo deseas -->
+    <div class="container header-container">
+      <!-- Logo -->
+      <div class="logo-container">
+        <a href="index.html">
+          <img src="assets/logoSinergia.png" alt="Sinergia Consultoría SGI" class="logo">
+        </a>
+      </div>
+      <!-- Menú de Navegación -->
+      <nav class="main-nav">
+        <ul>
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#por-que-elegir">¿Por qué elegirnos?</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
@@ -34,39 +52,98 @@
     </section>
 
     <!-- Sección del Slider -->
-<section class="slider-section">
-  <div class="slider-container">
-    <div class="slider">
-      <img src="assets/slider1.webp" alt="Imagen 1">
-      <img src="assets/slider2.webp" alt="Imagen 2">
-      <img src="assets/slider3.webp" alt="Imagen 3">
-      <img src="assets/slider4.webp" alt="Imagen 4">
-      <img src="assets/slider5.webp" alt="Imagen 5">
-      <img src="assets/slider6.webp" alt="Imagen 6">
-      <!-- Puedes agregar más imágenes si lo deseas -->
-    </div>
-  </div>
-</section>
-
-    <!-- Sección de Servicios -->
-    <section class="services-section">
-      <div class="container transparent-container">
-        <h2>Servicios de Sinergia Consultoría SGI</h2>
-        <p>
-          En <strong>Sinergia Consultoría SGI</strong> ayudamos a las empresas a implementar un Sistema de Gestión Integral para garantizar el cumplimiento normativo y evitar sanciones económicas. Nuestros servicios incluyen:
-        </p>
-        <ul>
-          <li>✔ Implementación de Sistemas de Gestión de Seguridad y Salud en el Trabajo (SG-SST).</li>
-          <li>✔ Auditorías de cumplimiento normativo.</li>
-          <li>✔ Capacitación y formación en seguridad laboral.</li>
-          <li>✔ Elaboración de planes de acción correctivos.</li>
-        </ul>
-        <p>💼 ¡Contáctanos hoy y protege tu empresa de multas y sanciones! 💼</p>
+    <section class="slider-section">
+      <div class="slider-container">
+        <div class="slider">
+          <img src="assets/slider1.webp" alt="Imagen 1">
+          <img src="assets/slider2.webp" alt="Imagen 2">
+          <img src="assets/slider3.webp" alt="Imagen 3">
+          <img src="assets/slider4.webp" alt="Imagen 4">
+          <img src="assets/slider5.webp" alt="Imagen 5">
+          <img src="assets/slider6.webp" alt="Imagen 6">
+        </div>
       </div>
     </section>
 
-    <!-- Sección de Formulario de Contacto -->
-    <section class="contact-section">
+    <!-- Sección de Servicios (con id="servicios") -->
+    <section id="servicios" class="services-section">
+      <div class="container transparent-container">
+        <header>
+          <h2>Servicios de Sinergia Consultoría SGI</h2>
+          <p>
+            En <strong>Sinergia Consultoría SGI</strong> ayudamos a las empresas a implementar un Sistema de Gestión Integral para garantizar el cumplimiento normativo y evitar sanciones económicas. Nuestros servicios incluyen:
+          </p>
+        </header>
+
+        <div class="service-category">
+          <div class="icon-container">
+            <img src="assets/icon-diagnostico.png" alt="Diagnóstico" class="service-icon">
+          </div>
+          <h3>Diagnóstico</h3>
+          <ul>
+            <li>Evaluamos y diseñamos estrategias para mejorar la seguridad laboral.</li>
+            <li>Revisión de cumplimiento normativo y elaboración de informes.</li>
+            <li>Evaluación de contratistas y permisos de trabajo.</li>
+          </ul>
+        </div>
+
+        <div class="service-category">
+          <div class="icon-container">
+            <img src="assets/icon-diseno.png" alt="Diseño y Administración" class="service-icon">
+          </div>
+          <h3>Diseño y Administración</h3>
+          <ul>
+            <li>Implementación del SG-SST adaptado a la normativa vigente.</li>
+            <li>Plan estratégico de seguridad vial y permisos de trabajo en altura.</li>
+            <li>Capacitaciones en emergencias, seguridad vial y normativas SST.</li>
+          </ul>
+        </div>
+
+        <div class="service-category">
+          <div class="icon-container">
+            <img src="assets/icon-asesoria.png" alt="Asesoría" class="service-icon">
+          </div>
+          <h3>Asesoría</h3>
+          <ul>
+            <li>Acompañamiento en auditorías internas y externas.</li>
+            <li>Actualización y optimización de documentos SST.</li>
+            <li>Formación en prevención de riesgos y bienestar laboral.</li>
+          </ul>
+        </div>
+
+        <footer>
+          <p>💼 ¡Contáctanos hoy y protege tu empresa de multas y sanciones! 💼</p>
+        </footer>
+      </div>
+    </section>
+
+    <!-- Sección "¿Por qué elegir Sinergia Consultoría SGI?" (con id="por-que-elegir") -->
+    <section id="por-que-elegir" class="why-choose">
+      <div class="container">
+        <h2>¿Por qué elegir Sinergia Consultoría SGI?</h2>
+        <p>Descubre las ventajas de trabajar con nosotros y cómo podemos potenciar tu empresa.</p>
+        <div class="features">
+          <div class="feature">
+            <img src="assets/experience-icon.png" alt="Experiencia Comprobada">
+            <h3>Experiencia Comprobada</h3>
+            <p>Con años de experiencia en el sector, respaldamos cada proyecto con resultados medibles.</p>
+          </div>
+          <div class="feature">
+            <img src="assets/compliance-icon.png" alt="Cumplimiento Normativo">
+            <h3>Cumplimiento Normativo</h3>
+            <p>Implementamos sistemas integrales que garantizan el cumplimiento de todas las normativas vigentes.</p>
+          </div>
+          <div class="feature">
+            <img src="assets/integrated-icon.png" alt="Soluciones Integrales">
+            <h3>Soluciones Integrales</h3>
+            <p>Desde la consultoría hasta la ejecución, te ofrecemos un servicio completo y adaptado a tus necesidades.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Formulario de Contacto (con id="contacto") -->
+    <section id="contacto" class="contact-section">
       <div class="container transparent-container">
         <h2>Registra tus Datos</h2>
         <form id="clienteForm" method="POST" action="#">
@@ -114,7 +191,7 @@
         </form>
       </div>
     </section>
-    
+  </main>
 
   <!-- Botón flotante de WhatsApp -->
   <a href="https://wa.me/573022542693?text=Hola,%20quiero%20más%20información%20sobre%20los%20servicios%20de%20Sinergia%20Consultoría%20SGI." 
