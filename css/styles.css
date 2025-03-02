@@ -1,10 +1,16 @@
 /* ===========================
-   Base y Reset
+   Reset y Configuración Global
 =========================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', sans-serif;  /* Usamos Roboto, eliminando la duplicidad */
+  font-family: 'Roboto', sans-serif;  /* Usamos Roboto */
   color: #333;
   background: url('../assets/logoSinergia.jpeg') repeat; /* Fondo repetitivo con el logo */
   background-size: 100px;
@@ -82,10 +88,13 @@ body {
   color: #007BFF;
 }
 
-/* Responsive: menú se puede ajustar o colapsar en dispositivos pequeños */
+/* ===========================
+   Responsive Header (Tablet y móviles)
+=========================== */
 @media (max-width: 768px) {
   .header-container {
     flex-direction: column;
+    padding: 10px;
   }
   
   .main-nav ul {
@@ -107,7 +116,7 @@ body {
 .video-container {
   width: 100%;
   border-radius: 10px;
-  overflow: hidden; /* Para mantener el radio de borde en el video */
+  overflow: hidden; /* Mantiene el radio en el video */
 }
 .video-container video {
   width: 100%;
@@ -127,7 +136,7 @@ body {
   width: 100%;
   max-width: 500px;  /* Ajusta según tu diseño */
   margin: 0 auto;
-  overflow: hidden;  /* Oculta las imágenes fuera del contenedor */
+  overflow: hidden;  /* Oculta lo que se sale del contenedor */
   height: 300px;     /* Altura fija para el slider */
 }
 
@@ -148,7 +157,6 @@ body {
 .slider img:hover {
   transform: scale(1.05);
 }
-
 
 /* ===========================
    Sección "Servicios de Sinergia Consultoría SGI"
@@ -289,7 +297,7 @@ body {
 .why-choose .feature h3 {
   font-size: 1.5rem;
   margin-bottom: 10px;
-  color: #1f580d; /* Puedes ajustar el color para que coincida con tu paleta */
+  color: #1f580d; /* Ajusta el color según tu paleta */
 }
 
 .why-choose .feature p {
@@ -410,16 +418,68 @@ button:hover {
   height: 24px;
 }
 
-
 /* ===========================
-   Responsive
+   Media Queries para Responsividad
 =========================== */
-@media (max-width: 600px) {
-  .container {
-    padding: 15px;
+
+/* Ajustes para pantallas pequeñas (max-width: 768px) */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+  
+  .main-nav ul {
+    flex-direction: column;
+    margin-top: 10px;
+  }
+  
+  .main-nav ul li {
+    margin: 5px 0;
+  }
+  
+  .services-section header h2,
+  .why-choose h2 {
+    font-size: 2rem;
+  }
+  
+  .services-section header p,
+  .why-choose p {
+    font-size: 1rem;
+  }
+  
+  .service-category {
+    width: 90%;
+    margin: 0 auto 20px;
+  }
+}
+
+/* Ajustes para dispositivos muy pequeños (max-width: 480px) */
+@media (max-width: 480px) {
+  .header-container {
+    padding: 0 10px;
+  }
+  
+  .logo {
+    max-width: 150px;
+  }
+  
+  .main-nav ul li a {
+    font-size: 0.9rem;
   }
   
   button {
     font-size: 14px;
+    padding: 8px;
+  }
+  
+  .site-footer {
+    font-size: 0.8rem;
+  }
+  
+  /* Opcional: ajustar el slider para dispositivos muy pequeños */
+  .slider-container {
+    max-width: 100%;
+    height: 250px;
   }
 }
