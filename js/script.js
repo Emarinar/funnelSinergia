@@ -1,58 +1,69 @@
-document.getElementById('clienteForm').addEventListener('submit', async function(event) {
-  event.preventDefault();
+// ===== Estado global para el chatbot =====
+let conversationState = {}; // Inicialmente vacío
 
-  // Obtener valores y eliminar espacios extra
-  const nombre = document.getElementById('nombre').value.trim();
-  const correo = document.getElementById('correo').value.trim();
-  const correoConfirm = document.getElementById('correoConfirm').value.trim();
-  const telefono = document.getElementById('telefono').value.trim();
-  const telefonoConfirm = document.getElementById('telefonoConfirm').value.trim();
-  const empresa = document.getElementById('empresa').value.trim();
-  const interes = document.getElementById('interes').value.trim();
-  const mensaje = document.getElementById('mensaje').value.trim();
+// ===== Funciones del Chatbot =====
 
-  // Validar que el correo y su confirmación sean iguales
-  if (correo !== correoConfirm) {
-    alert("Los correos no coinciden. Por favor, verifícalos.");
-    return;
-  }
+// Función para agregar mensajes al área de chat
+function appendMessage(sender, message) {
+  const messagesContainer = document.getElementById('chatbot-messages');
+  const messageEl = document.createElement('div');
+  messageEl.classList.add('chat-message', sender.toLowerCase());
+  messageEl.innerHTML = `<strong>${sender}:</strong> ${message}`;
+  messagesContainer.appendChild(messageEl);
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
 
-  // Validar que el teléfono y su confirmación sean iguales
-  if (telefono !== telefonoConfirm) {
-    alert("Los números de teléfono no coinciden. Por favor, verifícalos.");
-    return;
-  }
+// Función para enviar el mensaje al endpoint del chatbot
+async function sendMessage() {
+  const inputEl = document.getElementById('chatbot-input');
+  const message = inputEl.value.trim();
+  if (!message) return;
 
-  // Preparar el objeto de datos (omite los campos de confirmación)
-  const data = {
-    nombre: nombre,
-    correo: correo,
-    telefono: telefono,
-    empresa: empresa,
-    interes: interes,
-    mensaje: mensaje
-  };
+  // Mostrar el mensaje del usuario
+  appendMessage('Usuario', message);
+  inputEl.value = '';
 
   try {
-    const response = await fetch('http://localhost:3000/api/clientes', {
+    const response = await fetch('http://localhost:3000/chatbot', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, conversationState })
     });
-    const result = await response.text();
-    alert(result);
+    const data = await response.json();
     
-    // Resetear el formulario después del envío exitoso
-    document.getElementById('clienteForm').reset();
+    // Actualiza el estado de la conversación
+    conversationState = data.conversationState;
+    
+    // Muestra la respuesta del asistente
+    appendMessage('Asistente', data.reply);
   } catch (error) {
-    console.error('Error al enviar el formulario:', error);
-    alert('Ocurrió un error. Intenta nuevamente.');
+    console.error("Error enviando el mensaje:", error);
+    appendMessage('Asistente', 'Lo siento, ocurrió un error.');
+  }
+}
+
+// ===== Eventos del Chatbot =====
+document.getElementById('chatbot-send').addEventListener('click', sendMessage);
+document.getElementById('chatbot-input').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    sendMessage();
   }
 });
 
-// Seleccionamos el contenedor del slider y todas las imágenes
+// Manejador para abrir el chatbot
+document.getElementById('chatbot-toggle').addEventListener('click', () => {
+  document.getElementById('chatbot').classList.remove('minimized');
+  document.getElementById('chatbot-toggle').style.display = 'none';
+});
+
+// Manejador para cerrar el chatbot
+document.getElementById('chatbot-close').addEventListener('click', () => {
+  document.getElementById('chatbot').classList.add('minimized');
+  document.getElementById('chatbot-toggle').style.display = 'block';
+});
+
+// ===== Lógica del Slider =====
 const slider = document.querySelector('.slider');
 const slides = document.querySelectorAll('.slider img');
 let currentIndex = 0;
