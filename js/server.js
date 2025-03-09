@@ -6,62 +6,73 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import sql from 'mssql';
 import { OpenAI } from 'openai';
+import twilio from 'twilio'; // Si lo usas; si no, puedes eliminarlo
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-// Configuración de OpenAI utilizando la nueva API
+// Configuración de OpenAI utilizando la nueva API (Chat completions)
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Función auxiliar para insertar datos en SQL Server
+async function insertClientData(state) {
+  const config = {
+    server: 'localhost', // O 'localhost\\SQLEXPRESS'
+    database: 'sinergia_clientes',
+    user: 'node_user',
+    password: 'root',
+    options: {
+      encrypt: false,
+      trustServerCertificate: true,
+    },
+    port: 1433,
+  };
+
+  try {
+    await sql.connect(config);
+    await sql.query`
+      INSERT INTO clientes (Nombre, TipoIdentificacion, Identificacion, celular, correo, Servicios)
+      VALUES (${state.nombre}, ${state.tipoId}, ${state.identificacion}, ${state.celular}, ${state.correo}, ${state.servicios})
+    `;
+    console.log("Datos almacenados correctamente en la BD.");
+  } catch (error) {
+    console.error("Error con SQL Server:", error);
+    throw error;
+  }
+}
+
+// Estado inicial de la conversación (para reiniciarla)
+const initialState = {
+  stage: "init",
+  nombre: "",
+  tipoId: "",
+  identificacion: "",
+  celular: "",
+  correo: "",
+  servicios: "",
+  timestamp: Date.now()
+};
+
 /**
  * Endpoint para el chatbot.
- * Maneja el flujo de conversación y reinicia si no hay respuesta en 3 minutos.
+ * Maneja el flujo de conversación según el estado recibido.
  */
 app.post('/chatbot', async (req, res) => {
   let { message, conversationState } = req.body;
   
-  // Si no se envía estado, inicializarlo con un timestamp
+  // Inicializa el estado si no se envía o no tiene 'stage'
   if (!conversationState || !conversationState.stage) {
-    conversationState = {
-      stage: "init",
-      nombre: "",
-      tipoId: "",
-      identificacion: "",
-      celular: "",
-      correo: "",
-      servicios: "",
-      timestamp: Date.now()  // Marca de tiempo de la última actividad
-    };
-  } else {
-    // Verifica si han pasado más de 3 minutos sin actividad
-    if (conversationState.timestamp && (Date.now() - conversationState.timestamp > 180000)) {
-      // Reinicia la conversación
-      conversationState = {
-        stage: "init",
-        nombre: "",
-        tipoId: "",
-        identificacion: "",
-        celular: "",
-        correo: "",
-        servicios: "",
-        timestamp: Date.now()
-      };
-      return res.json({
-        reply: "El tiempo de espera ha expirado. Reiniciemos la conversación. ¿Cuál es tu nombre completo?",
-        conversationState
-      });
-    }
+    conversationState = { ...initialState };
   }
-
+  
   let reply = "";
 
-  // Flujo de conversación
   switch (conversationState.stage) {
     case "init":
-      reply = "Hola, bienvenido a Sinergia. ¿Cuál es tu nombre completo?";
+      reply = "Hola, bienvenido a SINERGIA CONSULTORÍA. ¿Cuál es tu nombre completo?";
       conversationState.stage = "nombre";
       break;
     case "nombre":
@@ -86,39 +97,45 @@ app.post('/chatbot', async (req, res) => {
       break;
     case "correo":
       conversationState.correo = message;
-      reply = "¿En qué servicios de Sinergia estás interesado? (por ejemplo: diagnóstico, asesoría, diseño tecnológico, etc.)";
-      conversationState.stage = "servicios";
+      reply = "¿En qué servicio de SINERGIA CONSULTORÍA estás interesado? (Opciones: Diagnóstico, Asesoría, Diseño tecnológico)";
+      conversationState.stage = "servicio";
       break;
-    case "servicios":
+    case "servicio":
       conversationState.servicios = message;
       reply = "Gracias por la información. ¿Deseas recibir una breve asesoría personalizada? (Responde: Sí o No)";
       conversationState.stage = "final";
       break;
     case "final":
-      // Normalizamos el mensaje para que la comparación sea insensible a tildes y mayúsculas/minúsculas
       const normalized = message.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
       if (normalized.includes("si")) {
-        reply = "Perfecto, un asesor se pondrá en contacto contigo en breve. ¡Gracias por confiar en Sinergia!";
+        const whatsappLink = process.env.EMPLOYEE_WHATSAPP_URL || "https://wa.me/573147204124";
+        reply = `Perfecto, por favor haz clic en <a href="${whatsappLink}" target="_blank">este enlace</a> para contactar a un asesor. ¡Gracias por confiar en SINERGIA CONSULTORÍA!`;
+        console.log("Insertando datos en la BD:", conversationState);
+        try {
+          await insertClientData(conversationState);
+        } catch (dbError) {
+          console.error("No se pudieron guardar los datos en la BD:", dbError);
+        }
       } else {
         reply = "Entendido. Si en el futuro necesitas asesoría, no dudes en contactarnos. ¡Que tengas un excelente día!";
       }
+      // Reinicia el estado de la conversación para iniciar un nuevo flujo
+      conversationState = { ...initialState };
       break;
     default:
       reply = "Lo siento, no entendí tu respuesta. ¿Podrías repetirlo?";
       break;
   }
   
-  // Actualiza el timestamp para reiniciar el tiempo de inactividad
   conversationState.timestamp = Date.now();
   res.json({ reply, conversationState });
 });
 
-
 /**
- * Endpoint para almacenar datos del cliente en SQL Server.
+ * Endpoint para almacenar datos del cliente en SQL Server (alternativo)
  */
 app.post('/submit', async (req, res) => {
-  const { nombre, cedula, identificacion, celular, correo } = req.body;
+  const { nombre, tipoId, identificacion, celular, correo, servicios } = req.body;
 
   const config = {
     server: 'localhost', // O 'localhost\\SQLEXPRESS'
@@ -127,16 +144,16 @@ app.post('/submit', async (req, res) => {
     password: 'root',
     options: {
       encrypt: false,
-      trustServerCertificate: true
+      trustServerCertificate: true,
     },
-    port: 1433
+    port: 1433,
   };
 
   try {
     await sql.connect(config);
     await sql.query`
-      INSERT INTO Clientes (nombre, cedula, identificacion, celular, correo)
-      VALUES (${nombre}, ${cedula}, ${identificacion}, ${celular}, ${correo})
+      INSERT INTO clientes (Nombre, TipoIdentificacion, Identificacion, celular, correo, Servicios)
+      VALUES (${nombre}, ${tipoId}, ${identificacion}, ${celular}, ${correo}, ${servicios})
     `;
     res.json({ message: 'Datos almacenados correctamente' });
   } catch (error) {

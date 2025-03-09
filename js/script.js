@@ -1,5 +1,5 @@
 // ===== Estado global para el chatbot =====
-let conversationState = {}; // Inicialmente vacío
+let conversationState = {};
 
 // ===== Funciones del Chatbot =====
 
@@ -8,18 +8,18 @@ function appendMessage(sender, message) {
   const messagesContainer = document.getElementById('chatbot-messages');
   const messageEl = document.createElement('div');
   messageEl.classList.add('chat-message', sender.toLowerCase());
+  // Usamos innerHTML para que se interprete el HTML incluido (por ejemplo, el enlace)
   messageEl.innerHTML = `<strong>${sender}:</strong> ${message}`;
   messagesContainer.appendChild(messageEl);
   messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-// Función para enviar el mensaje al endpoint del chatbot
+// Función para enviar mensaje al endpoint del chatbot
 async function sendMessage() {
   const inputEl = document.getElementById('chatbot-input');
   const message = inputEl.value.trim();
   if (!message) return;
 
-  // Mostrar el mensaje del usuario
   appendMessage('Usuario', message);
   inputEl.value = '';
 
@@ -30,11 +30,7 @@ async function sendMessage() {
       body: JSON.stringify({ message, conversationState })
     });
     const data = await response.json();
-    
-    // Actualiza el estado de la conversación
     conversationState = data.conversationState;
-    
-    // Muestra la respuesta del asistente
     appendMessage('Asistente', data.reply);
   } catch (error) {
     console.error("Error enviando el mensaje:", error);
@@ -51,13 +47,12 @@ document.getElementById('chatbot-input').addEventListener('keypress', function(e
   }
 });
 
-// Manejador para abrir el chatbot
+// ===== Eventos para abrir y cerrar el Chatbot =====
 document.getElementById('chatbot-toggle').addEventListener('click', () => {
   document.getElementById('chatbot').classList.remove('minimized');
   document.getElementById('chatbot-toggle').style.display = 'none';
 });
 
-// Manejador para cerrar el chatbot
 document.getElementById('chatbot-close').addEventListener('click', () => {
   document.getElementById('chatbot').classList.add('minimized');
   document.getElementById('chatbot-toggle').style.display = 'block';
